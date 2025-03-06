@@ -25,6 +25,7 @@ export class SMTPClient {
   private serverCapabilities: string[];
   private secureMode: boolean;
   private retryCount: number;
+  private readonly maxEmailSize = 10485760; // 10MB
 
   constructor(config: SMTPConfiguration) {
     this.config = {
@@ -442,7 +443,10 @@ export class SMTPClient {
    */
   private sanitizeHeader(value: string): string {
     // Replace newlines and carriage returns to prevent header injection
-    const sanitized = value.replace(/[\r\n]+/g, ' ');
+    const sanitized = value
+      .replace(/[\r\n\t]+/g, ' ')
+      .replace(/\s{2,}/g, ' ')
+      .trim();
     return this.encodeHeaderValue(sanitized);
   }
 
@@ -635,6 +639,12 @@ export class SMTPClient {
 
         // Create email content with text and/or HTML
         const emailContent = this.createMultipartEmail(options);
+        if (emailContent.length > this.maxEmailSize) {
+          return {
+            success: false,
+            error: 'Email size exceeds maximum allowed'
+          };
+        }
 
         // Send content and finalize with a single dot
         await this.sendCommand(`${emailContent}\r\n.`, 250);
@@ -698,7 +708,8 @@ export class SMTPClient {
       this.log(`Error during QUIT: ${(e as Error).message}`, true);
     } finally {
       if (this.socket) {
-        this.socket.end();
+        this.socket.destroy();
+        this.socket = null;
         this.connected = false;
       }
     }

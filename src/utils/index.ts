@@ -1,3 +1,5 @@
+import { promises as dnsPromises } from 'node:dns';
+
 /**
  * Encode text using quoted-printable encoding
  * Follows RFC 2045 specification for MIME encoding
@@ -107,8 +109,6 @@ export function validateEmail(email: string): boolean {
     return false;
   }
 }
-
-import { promises as dnsPromises } from 'node:dns';
 
 /**
  * Helper function to verify SMTP server MX records
