@@ -18,15 +18,33 @@ jobs:
           node-version: 22
 
       - name: Install dependencies
-        run: |
-          npm ci --ignore-scripts
-          npm audit fix
+        run: npm install
 
       - name: Compile
         run: npx tsc
 
+      - name: Install Mailpit
+        run: sudo bash < <(curl -sL https://raw.githubusercontent.com/axllent/mailpit/develop/install.sh)
+
       - name: Test
-        run: npm test
+        run: |
+          mailpit --smtp [::]:1025 --listen [::]:8025 &
+
+          # Wait for Mailpit to be available
+          echo "Waiting for Mailpit to start..."
+          timeout=15
+          while ! curl -s http://localhost:8025/v1/messages > /dev/null 2>&1; do
+            if [ $timeout -le 0 ]; then
+              echo "Timeout waiting for Mailpit"
+              exit 1
+            fi
+            echo "Waiting..."
+            sleep 1
+            timeout=$((timeout-1))
+          done
+
+          # Run tests once Mailpit is confirmed available
+          npm test
 
   publish:
     needs: ['build']
