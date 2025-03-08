@@ -5,7 +5,7 @@ import type { ConfigurationOptions, SMTPConfiguration } from './interfaces';
 import { ValidationError } from './errors';
 
 /**
- * @description Configuration class that handles both CLI arguments and config file settings
+ * @description Configuration class that handles both CLI arguments and config file settings.
  */
 export class Configuration {
   private readonly config: SMTPConfiguration;
@@ -15,9 +15,7 @@ export class Configuration {
   };
 
   /**
-   * @description Creates a new Configuration instance
-   * @param configFilePath Path to the configuration file (e.g., 'mikromail.config.json')
-   * @param args Command line arguments array from process.argv
+   * @description Creates a new Configuration instance.
    */
   constructor(options?: ConfigurationOptions) {
     const configuration = options?.config || {};
@@ -31,9 +29,10 @@ export class Configuration {
   /**
    * @description Creates a configuration object by merging defaults, config file settings,
    * and CLI arguments (in order of increasing precedence)
-   * @param configFilePath Path to the configuration file
-   * @param args Command line arguments array
-   * @returns The merged configuration object
+   * @param configFilePath Path to the configuration file.
+   * @param args Command line arguments array.
+   * @param configuration User-provided configuration input.
+   * @returns The merged configuration object.
    */
   private create(
     configFilePath: string,
@@ -76,9 +75,9 @@ export class Configuration {
   }
 
   /**
-   * @description Parses command line arguments into a configuration object
-   * @param args Command line arguments array
-   * @returns Parsed CLI configuration
+   * @description Parses command line arguments into a configuration object.
+   * @param args Command line arguments array.
+   * @returns Parsed CLI configuration.
    */
   private parseCliArgs(args: string[]): Partial<SMTPConfiguration> {
     const cliConfig: Partial<SMTPConfiguration> = {};
@@ -122,16 +121,16 @@ export class Configuration {
   }
 
   /**
-   * @description Validates the configuration
-   * @throws Error if the configuration is invalid
+   * @description Validates the configuration.
+   * @throws Error if the configuration is invalid.
    */
   private validate(): void {
     if (!this.config.host) throw new ValidationError('Host value not found');
   }
 
   /**
-   * @description Returns the complete configuration
-   * @returns The configuration object
+   * @description Returns the complete configuration.
+   * @returns The configuration object.
    */
   get(): SMTPConfiguration {
     this.validate();
