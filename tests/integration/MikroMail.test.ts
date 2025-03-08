@@ -61,11 +61,16 @@ test('It should send a plain text email', async () => {
 }, 10000);
 
 test('It should send an HTML email', async () => {
+  const magicLink =
+    'https://mydomain.com/app/verify=token=jkahs7a62e8agdoia26t&email=sam.person@mydomain.com';
+
+  const html = `<h1>HTML Email Test</h1><p>This is an <b>HTML</b> email for testing purposes.</p><p><a href="${magicLink}">Demo verification link</a></p>`;
+
   await mailClient.send({
     from: 'sender@example.com',
     to: 'recipient@example.com',
     subject: 'Integration Test - HTML Email',
-    html: '<h1>HTML Email Test</h1><p>This is an <b>HTML</b> email for testing purposes.</p>'
+    html
   });
 
   await new Promise((resolve) => setTimeout(resolve, 500));
@@ -79,8 +84,7 @@ test('It should send an HTML email', async () => {
   expect(testEmail).toBeDefined();
 
   const htmlContent = await getMessageHtml(testEmail.ID);
-  expect(htmlContent).toContain('HTML Email Test');
-  expect(htmlContent).toContain('<b>HTML</b>');
+  expect(htmlContent.trim()).toBe(html);
 }, 10000);
 
 test('It should send an email with CC recipients', async () => {

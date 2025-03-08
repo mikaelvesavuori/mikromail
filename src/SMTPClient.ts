@@ -513,12 +513,10 @@ export class SMTPClient {
       return `${headers.join('\r\n')}\r\n\r\n--${boundary}\r\nContent-Type: text/plain; charset=utf-8\r\nContent-Transfer-Encoding: quoted-printable\r\n\r\n${encodeQuotedPrintable(text || '')}\r\n\r\n--${boundary}\r\nContent-Type: text/html; charset=utf-8\r\nContent-Transfer-Encoding: quoted-printable\r\n\r\n${encodeQuotedPrintable(html || '')}\r\n\r\n--${boundary}--\r\n`;
     }
 
-    if (html) {
-      headers.push('Content-Type: text/html; charset=utf-8');
-      return `${headers.join('\r\n')}\r\n\r\n${html}`;
-    }
+    headers.push('Content-Type: text/html; charset=utf-8');
 
-    headers.push('Content-Type: text/plain; charset=utf-8');
+    if (html) return `${headers.join('\r\n')}\r\n\r\n${html}`;
+
     return `${headers.join('\r\n')}\r\n\r\n${text || ''}`;
   }
 
