@@ -468,8 +468,7 @@ export class SMTPClient {
       `Subject: ${this.sanitizeHeader(options.subject)}`,
       `Message-ID: ${messageId}`,
       `Date: ${date}`,
-      'MIME-Version: 1.0',
-      'Content-Transfer-Encoding: quoted-printable'
+      'MIME-Version: 1.0'
     ];
 
     // Optional headers
@@ -510,7 +509,7 @@ export class SMTPClient {
         `Content-Type: multipart/alternative; boundary="${boundary}"`
       );
 
-      return `${headers.join('\r\n')}\r\n\r\n--${boundary}\r\nContent-Type: text/plain; charset=utf-8\r\nContent-Transfer-Encoding: quoted-printable\r\n\r\n${text || ''}\r\n\r\n--${boundary}\r\nContent-Type: text/html; charset=utf-8\r\nContent-Transfer-Encoding: quoted-printable\r\n\r\n${html || ''}\r\n\r\n--${boundary}--\r\n`;
+      return `${headers.join('\r\n')}\r\n\r\n--${boundary}\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n${text || ''}\r\n\r\n--${boundary}\r\nContent-Type: text/html; charset=utf-8\r\n\r\n${html || ''}\r\n\r\n--${boundary}--\r\n`;
     }
 
     headers.push('Content-Type: text/html; charset=utf-8');
