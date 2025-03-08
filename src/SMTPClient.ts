@@ -11,7 +11,7 @@ import type {
   SendResult
 } from './interfaces';
 
-import { encodeQuotedPrintable, validateEmail } from './utils';
+import { validateEmail } from './utils';
 
 /**
  * Enhanced SMTP client for sending emails without dependencies
@@ -510,7 +510,7 @@ export class SMTPClient {
         `Content-Type: multipart/alternative; boundary="${boundary}"`
       );
 
-      return `${headers.join('\r\n')}\r\n\r\n--${boundary}\r\nContent-Type: text/plain; charset=utf-8\r\nContent-Transfer-Encoding: quoted-printable\r\n\r\n${encodeQuotedPrintable(text || '')}\r\n\r\n--${boundary}\r\nContent-Type: text/html; charset=utf-8\r\nContent-Transfer-Encoding: quoted-printable\r\n\r\n${encodeQuotedPrintable(html || '')}\r\n\r\n--${boundary}--\r\n`;
+      return `${headers.join('\r\n')}\r\n\r\n--${boundary}\r\nContent-Type: text/plain; charset=utf-8\r\nContent-Transfer-Encoding: quoted-printable\r\n\r\n${text || ''}\r\n\r\n--${boundary}\r\nContent-Type: text/html; charset=utf-8\r\nContent-Transfer-Encoding: quoted-printable\r\n\r\n${html || ''}\r\n\r\n--${boundary}--\r\n`;
     }
 
     headers.push('Content-Type: text/html; charset=utf-8');
