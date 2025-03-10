@@ -98,4 +98,4 @@ Some of the tests require faking an SMTP server. Here we use [Mailpit](https://g
 
 ## License
 
-MIT
+MIT. See the `LICENSE` file.
