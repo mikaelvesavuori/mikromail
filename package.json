@@ -41,7 +41,8 @@
     "clean": "rm -rf lib && rm -rf dist",
     "lint": "npx @biomejs/biome check --write ./src ./tests",
     "package": "npm pack",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@biomejs/biome": "1",
