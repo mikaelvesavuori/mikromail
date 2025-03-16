@@ -1,11 +1,11 @@
 import { existsSync, unlinkSync, writeFileSync } from 'node:fs';
 import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 
-import type { SMTPConfiguration } from '../../src/interfaces';
+import type { SMTPConfiguration } from '../../src/interfaces/index.js';
 
-import { Configuration } from '../../src/Configuration';
+import { Configuration } from '../../src/Configuration.js';
 
-import { ValidationError } from '../../src/errors';
+import { ValidationError } from '../../src/errors/index.js';
 
 const validConfigPath = 'test-config-valid.json';
 const invalidConfigPath = 'test-config-invalid.json';

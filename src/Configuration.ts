@@ -1,8 +1,11 @@
 import { existsSync, readFileSync } from 'node:fs';
 
-import type { ConfigurationOptions, SMTPConfiguration } from './interfaces';
+import type {
+  ConfigurationOptions,
+  SMTPConfiguration
+} from './interfaces/index.js';
 
-import { ValidationError } from './errors';
+import { ValidationError } from './errors/index.js';
 
 /**
  * @description Configuration class that handles both CLI arguments and config file settings.

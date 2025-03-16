@@ -1,1 +1,1 @@
-export * from './MikroMail';
+export * from './MikroMail.js';

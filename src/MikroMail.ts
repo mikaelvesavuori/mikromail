@@ -1,8 +1,8 @@
-import type { ConfigurationOptions, EmailOptions } from './interfaces';
+import type { ConfigurationOptions, EmailOptions } from './interfaces/index.js';
 
-import { Configuration } from './Configuration';
-import { SMTPClient } from './SMTPClient';
-import { verifyEmailDomain } from './utils';
+import { Configuration } from './Configuration.js';
+import { SMTPClient } from './SMTPClient.js';
+import { verifyEmailDomain } from './utils/index.js';
 
 /**
  * @description Lightweight replacement for Nodemailer, supporting HTML, international symbols, and more.

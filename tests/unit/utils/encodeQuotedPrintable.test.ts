@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import { encodeQuotedPrintable } from '../../../src/utils';
+import { encodeQuotedPrintable } from '../../../src/utils/index.js';
 
 describe('Basic ASCII text tests', () => {
   test('It should not encode plain ASCII text', () => {

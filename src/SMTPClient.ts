@@ -9,9 +9,9 @@ import type {
   EmailOptions,
   SMTPConfiguration,
   SendResult
-} from './interfaces';
+} from './interfaces/index.js';
 
-import { validateEmail } from './utils';
+import { validateEmail } from './utils/index.js';
 
 /**
  * Enhanced SMTP client for sending emails without dependencies

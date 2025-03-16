@@ -1,4 +1,4 @@
-import { SMTPClient } from '../../src/SMTPClient';
+import { SMTPClient } from '../../src/SMTPClient.js';
 
 export const MAILPIT_CONFIG = {
   host: 'localhost',

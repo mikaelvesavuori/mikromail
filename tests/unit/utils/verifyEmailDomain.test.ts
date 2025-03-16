@@ -1,6 +1,9 @@
 import { describe, expect, test } from 'vitest';
 
-import { verifyEmailDomain, verifyMXRecords } from '../../../src/utils';
+import {
+  verifyEmailDomain,
+  verifyMXRecords
+} from '../../../src/utils/index.js';
 
 // These tests will use real DNS lookups
 // Note: Tests may fail depending on network connectivity and DNS server availability

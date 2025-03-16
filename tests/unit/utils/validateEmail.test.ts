@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest';
 
-import { validateEmail } from '../../../src/utils';
+import { validateEmail } from '../../../src/utils/index.js';
 
 const invalidEmails = [
   // Missing @ symbol

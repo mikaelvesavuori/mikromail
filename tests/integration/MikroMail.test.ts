@@ -1,9 +1,9 @@
 import { existsSync, unlinkSync, writeFileSync } from 'node:fs';
 import { afterAll, beforeAll, beforeEach, expect, test } from 'vitest';
 
-import { MikroMail } from '../../src/MikroMail';
+import { MikroMail } from '../../src/MikroMail.js';
 
-import { SMTPClient } from '../../src/SMTPClient';
+import { SMTPClient } from '../../src/SMTPClient.js';
 import {
   MAILPIT_API,
   MAILPIT_CONFIG,
@@ -12,7 +12,7 @@ import {
   getMessageHeaders,
   getMessageHtml,
   getMessageText
-} from '../utils/Mailpit';
+} from '../utils/Mailpit.js';
 
 let mailClient: MikroMail;
 const CONFIG_PATH = 'test-integration-config.json';

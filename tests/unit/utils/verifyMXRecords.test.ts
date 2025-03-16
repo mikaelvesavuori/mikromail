@@ -1,7 +1,7 @@
 import { promises as dnsPromises } from 'node:dns';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
-import { verifyMXRecords } from '../../../src/utils';
+import { verifyMXRecords } from '../../../src/utils/index.js';
 
 vi.mock('node:dns', () => ({
   promises: {
