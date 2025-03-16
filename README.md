@@ -3,6 +3,7 @@
 **Lightweight replacement for Nodemailer, supporting HTML, international symbols, and more**.
 
 ![Build Status](https://github.com/mikaelvesavuori/mikromail/workflows/main/badge.svg)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 ---
 
@@ -14,7 +15,7 @@
 
 ## Usage
 
-### Basic importing and usage
+### Quick Start
 
 ```typescript
 import { MikroMail } from 'MikroMail';

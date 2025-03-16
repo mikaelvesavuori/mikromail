@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-These versions of `mikromail` are currently being supported with security updates.
+These versions of the project are currently being supported with security updates.
 
 | Version | Supported          |
 | ------- | ------------------ |
