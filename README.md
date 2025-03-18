@@ -30,7 +30,7 @@ const emailOptions = {
   from: 'me@mydomain.com',
   subject: 'Test Email',
   text: 'Hello!',
-  to: 'you@yourdomain.com'
+  to: 'you@yourdomain.com' // You can also send to multiple recipients: ['sam@acmecorp.cloud', 'sammy@acmecorp.cloud']
 };
 
 await new MikroMail({ config }).send(emailOptions);

@@ -87,6 +87,28 @@ test('It should send an HTML email', async () => {
   expect(htmlContent.trim()).toBe(html);
 }, 10000);
 
+test('It should send an email with multiple recipients', async () => {
+  await mailClient.send({
+    from: 'sender@example.com',
+    to: ['recipient@example.com', 'recipient2@example.com'],
+    cc: ['cc1@example.com', 'cc2@example.com'],
+    subject: 'Integration Test - CC Recipients',
+    text: 'This email has CC recipients.'
+  });
+
+  await new Promise((resolve) => setTimeout(resolve, 500));
+
+  const messages = await getMailpitMessages();
+  const testEmail = messages.find(
+    (msg: any) => msg.Subject === 'Integration Test - CC Recipients'
+  );
+
+  expect(testEmail).toBeDefined();
+  expect(testEmail.Cc).toHaveLength(2);
+  expect(testEmail.To[0].Address).toContain('recipient@example.com');
+  expect(testEmail.To[1].Address).toContain('recipient2@example.com');
+}, 10000);
+
 test('It should send an email with CC recipients', async () => {
   await mailClient.send({
     from: 'sender@example.com',

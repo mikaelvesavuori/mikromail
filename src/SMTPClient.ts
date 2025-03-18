@@ -459,17 +459,23 @@ export class SMTPClient {
 
     // Process email addresses
     const from = options.from || this.config.user;
-    const { to } = options;
+
+    const recipients = Array.isArray(options.to)
+      ? options.to.join(', ')
+      : options.to;
 
     // Common headers with sanitization
     const headers = [
       `From: ${this.sanitizeHeader(from)}`,
-      `To: ${this.sanitizeHeader(to)}`,
+      `To: ${this.sanitizeHeader(recipients)}`,
       `Subject: ${this.sanitizeHeader(options.subject)}`,
       `Message-ID: ${messageId}`,
       `Date: ${date}`,
       'MIME-Version: 1.0'
     ];
+
+    //const recipients = Array.isArray(to) ? to.join(', ') : to;
+    //headers.push(`To: ${this.sanitizeHeader(recipients)}`);
 
     // Optional headers
     if (options.cc) {
@@ -477,9 +483,8 @@ export class SMTPClient {
       headers.push(`Cc: ${this.sanitizeHeader(cc)}`);
     }
 
-    if (options.replyTo) {
+    if (options.replyTo)
       headers.push(`Reply-To: ${this.sanitizeHeader(options.replyTo)}`);
-    }
 
     // Add custom headers if provided
     if (options.headers) {
@@ -573,11 +578,23 @@ export class SMTPClient {
     }
 
     // Validate email addresses
-    if (!validateEmail(from) || !validateEmail(to)) {
+
+    if (!validateEmail(from)) {
       return {
         success: false,
         error: 'Invalid email address format'
       };
+    }
+
+    const recipients = Array.isArray(options.to) ? options.to : [options.to];
+
+    for (const recipient of recipients) {
+      if (!validateEmail(recipient)) {
+        return {
+          success: false,
+          error: `Invalid recipient email address format: ${recipient}`
+        };
+      }
     }
 
     // Try sending with retries for transient errors
@@ -602,17 +619,17 @@ export class SMTPClient {
           await this.smtpHandshake();
         }
 
-        // Set sender and recipient
+        // Set sender and recipient(s)
         await this.sendCommand(`MAIL FROM:<${from}>`, 250);
-        await this.sendCommand(`RCPT TO:<${to}>`, 250);
+        for (const recipient of recipients)
+          await this.sendCommand(`RCPT TO:<${recipient}>`, 250);
 
         // Add CC recipients to RCPT commands
         if (options.cc) {
           const ccList = Array.isArray(options.cc) ? options.cc : [options.cc];
           for (const cc of ccList) {
-            if (validateEmail(cc)) {
+            if (validateEmail(cc))
               await this.sendCommand(`RCPT TO:<${cc}>`, 250);
-            }
           }
         }
 
@@ -622,9 +639,8 @@ export class SMTPClient {
             ? options.bcc
             : [options.bcc];
           for (const bcc of bccList) {
-            if (validateEmail(bcc)) {
+            if (validateEmail(bcc))
               await this.sendCommand(`RCPT TO:<${bcc}>`, 250);
-            }
           }
         }
 

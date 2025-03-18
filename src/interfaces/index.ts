@@ -20,7 +20,7 @@ export interface SMTPConfiguration {
  */
 export interface EmailOptions {
   from?: string;
-  to: string;
+  to: string | string[];
   cc?: string | string[];
   bcc?: string | string[];
   replyTo?: string;

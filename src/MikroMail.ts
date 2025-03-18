@@ -38,9 +38,17 @@ export class MikroMail {
    */
   public async send(emailOptions: EmailOptions) {
     try {
-      const hasMXRecords = await verifyEmailDomain(emailOptions.to);
-      if (!hasMXRecords)
-        console.error('Warning: No MX records found for recipient domain');
+      const recipients = Array.isArray(emailOptions.to)
+        ? emailOptions.to
+        : [emailOptions.to];
+
+      for (const recipient of recipients) {
+        const hasMXRecords = await verifyEmailDomain(recipient);
+        if (!hasMXRecords)
+          console.error(
+            `Warning: No MX records found for recipient domain: ${recipient}`
+          );
+      }
 
       const result = await this.smtpClient.sendEmail(emailOptions);
 
