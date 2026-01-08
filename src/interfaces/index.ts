@@ -13,6 +13,8 @@ export interface SMTPConfiguration {
   maxRetries?: number;
   retryDelay?: number;
   skipAuthentication?: boolean; // Skip authentication step (for test servers)
+  skipEmailValidation?: boolean; // Skip email validation (for test providers like Mailtrap)
+  skipMXRecordCheck?: boolean; // Skip MX record verification (for test providers)
 }
 
 /**

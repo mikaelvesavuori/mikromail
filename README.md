@@ -89,6 +89,49 @@ const emailOptions = {
 await new MikroMail({ config }).send(emailOptions);
 ```
 
+## Provider-specific configurations
+
+### Proton Mail
+
+Proton Mail works reliably with port 465 and implicit TLS:
+
+```typescript
+const config = {
+  user: 'your-email@proton.me',
+  password: 'YOUR_APP_PASSWORD',
+  host: 'smtp.protonmail.ch',
+  port: 465,
+  secure: true
+};
+```
+
+Note: Port 587 with STARTTLS (`secure: false`) may have connectivity issues with some Proton Mail configurations. Use port 465 for the most reliable connection.
+
+### Test providers (Mailtrap, etc.)
+
+Some test SMTP providers use long random IDs instead of email addresses. To support these providers, use the `skipEmailValidation` and `skipMXRecordCheck` options:
+
+```typescript
+const config = {
+  user: 'your-mailtrap-username',
+  password: 'your-mailtrap-password',
+  host: 'smtp.mailtrap.io',
+  port: 587,
+  secure: false,
+  skipEmailValidation: true,
+  skipMXRecordCheck: true
+};
+
+const emailOptions = {
+  from: 'sender@example.com',
+  subject: 'Test Email',
+  text: 'Hello!',
+  to: 'a1b2c3d4e5f6g7' // Long random ID used by test providers
+};
+
+await new MikroMail({ config }).send(emailOptions);
+```
+
 ## Testing
 
 Some of the tests require faking an SMTP server. Here we use [Mailpit](https://github.com/axllent/mailpit), which will run a server on `http://localhost:8025`.

@@ -175,7 +175,7 @@ describe('CLI argument parsing tests', () => {
   });
 
   test('It should use direct config to satisfy validation requirements', () => {
-    // @ts-ignore
+    // @ts-expect-error
     const directConfig: SMTPConfiguration = {
       host: 'direct.test.com'
     };
@@ -412,5 +412,89 @@ describe('Retries and max retries tests', () => {
     const result = config.get();
 
     expect(result.maxRetries).toBe(2);
+  });
+});
+
+describe('Test provider configuration options', () => {
+  test('It should support skipEmailValidation option', () => {
+    const directConfig: SMTPConfiguration = {
+      host: 'test.test.com',
+      user: 'testuser',
+      password: 'testpass',
+      skipEmailValidation: true
+    };
+
+    const config = new Configuration({ config: directConfig });
+    const result = config.get();
+
+    expect(result.skipEmailValidation).toBe(true);
+  });
+
+  test('It should support skipMXRecordCheck option', () => {
+    const directConfig: SMTPConfiguration = {
+      host: 'test.test.com',
+      user: 'testuser',
+      password: 'testpass',
+      skipMXRecordCheck: true
+    };
+
+    const config = new Configuration({ config: directConfig });
+    const result = config.get();
+
+    expect(result.skipMXRecordCheck).toBe(true);
+  });
+
+  test('It should default skipEmailValidation to false', () => {
+    const directConfig: SMTPConfiguration = {
+      host: 'test.test.com',
+      user: 'testuser',
+      password: 'testpass'
+    };
+
+    const config = new Configuration({ config: directConfig });
+    const result = config.get();
+
+    expect(result.skipEmailValidation).toBe(false);
+  });
+
+  test('It should default skipMXRecordCheck to false', () => {
+    const directConfig: SMTPConfiguration = {
+      host: 'test.test.com',
+      user: 'testuser',
+      password: 'testpass'
+    };
+
+    const config = new Configuration({ config: directConfig });
+    const result = config.get();
+
+    expect(result.skipMXRecordCheck).toBe(false);
+  });
+
+  test('It should support both skip options from config file', () => {
+    const testConfigPath = 'test-config-skip-options.json';
+    writeFileSync(
+      testConfigPath,
+      JSON.stringify({
+        host: 'smtp.mailtrap.io',
+        user: 'mailtrapuser',
+        password: 'mailtrappass',
+        port: 587,
+        secure: false,
+        skipEmailValidation: true,
+        skipMXRecordCheck: true
+      })
+    );
+
+    try {
+      const config = new Configuration({ configFilePath: testConfigPath });
+      const result = config.get();
+
+      expect(result.skipEmailValidation).toBe(true);
+      expect(result.skipMXRecordCheck).toBe(true);
+    } finally {
+      if (existsSync(testConfigPath)) {
+        unlinkSync(testConfigPath);
+      }
+    }
   });
 });

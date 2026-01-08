@@ -1,7 +1,7 @@
 {
   "name": "mikromail",
   "description": "Lightweight replacement for Nodemailer, supporting HTML, international symbols, and more.",
-  "version": "0.0.7",
+  "version": "1.0.0",
   "author": "Mikael Vesavuori",
   "license": "MIT",
   "keywords": [
@@ -31,7 +31,6 @@
   ],
   "scripts": {
     "test": "npm run test:licenses && npm run test:types && npm run lint && npm run test:unit",
-    "test:data": "rm -rf test-db && npx tsx random-data.ts",
     "test:types": "npx type-coverage --at-least 95 --strict --ignore-files \"tests/**/*.ts\" --ignore-files \"*.ts\" --ignore-files \"src/errors/*.ts\" --ignore-files \"testdata/*.ts\"",
     "test:licenses": "npx license-compliance --direct --allow 'MIT;ISC;0BSD;BSD-2-Clause;BSD-3-Clause;Apache-2.0;Unlicense;CC0-1.0'",
     "test:unit": "npx vitest run --coverage",
@@ -45,9 +44,9 @@
     "prepare": "husky"
   },
   "devDependencies": {
-    "@biomejs/biome": "1",
+    "@biomejs/biome": "2",
     "@types/node": "latest",
-    "@vitest/coverage-v8": "2",
+    "@vitest/coverage-v8": "4",
     "husky": "9",
     "license-compliance": "latest",
     "tslib": "latest",
@@ -55,6 +54,6 @@
     "tsx": "latest",
     "type-coverage": "2",
     "typescript": "5",
-    "vitest": "2"
+    "vitest": "4"
   }
 }

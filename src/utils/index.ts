@@ -102,7 +102,7 @@ export function validateEmail(email: string): boolean {
     for (const part of domainParts) {
       if (!part || part.length > 63) return false;
       // Domain part can't start or end with hyphen, and can only contain alphanumeric and hyphens
-      if (!/^[a-zA-Z0-9]([a-zA-Z0-9\-]*[a-zA-Z0-9])?$/.test(part)) return false;
+      if (!/^[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?$/.test(part)) return false;
     }
     return true;
   } catch (_error) {

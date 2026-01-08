@@ -39,7 +39,9 @@ export class SMTPClient {
       clientName: config.clientName ?? os.hostname(),
       maxRetries: config.maxRetries ?? 3,
       retryDelay: config.retryDelay ?? 1000,
-      skipAuthentication: config.skipAuthentication || false
+      skipAuthentication: config.skipAuthentication || false,
+      skipEmailValidation: config.skipEmailValidation || false,
+      skipMXRecordCheck: config.skipMXRecordCheck || false
     };
 
     this.socket = null;
@@ -191,7 +193,7 @@ export class SMTPClient {
         ciphers: 'HIGH:!aNULL:!MD5:!RC4'
       };
 
-      // @ts-ignore
+      // @ts-expect-error
       const tlsSocket = tls.connect(tlsOptions);
 
       tlsSocket.once('error', (err) => {
@@ -577,24 +579,27 @@ export class SMTPClient {
       };
     }
 
-    // Validate email addresses
-
-    if (!validateEmail(from)) {
-      return {
-        success: false,
-        error: 'Invalid email address format'
-      };
-    }
-
+    // Validate email addresses (unless validation is skipped for test providers)
     const recipients = Array.isArray(options.to) ? options.to : [options.to];
 
-    for (const recipient of recipients) {
-      if (!validateEmail(recipient)) {
+    if (!this.config.skipEmailValidation) {
+      if (!validateEmail(from)) {
         return {
           success: false,
-          error: `Invalid recipient email address format: ${recipient}`
+          error: 'Invalid email address format'
         };
       }
+
+      for (const recipient of recipients) {
+        if (!validateEmail(recipient)) {
+          return {
+            success: false,
+            error: `Invalid recipient email address format: ${recipient}`
+          };
+        }
+      }
+    } else {
+      this.log('Email validation skipped (testing mode)');
     }
 
     // Try sending with retries for transient errors

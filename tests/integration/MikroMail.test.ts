@@ -307,3 +307,56 @@ test('It should handle non-ASCII characters in subject and body', async () => {
     'This email contains international characters: español, français, português, 中文, 日本語, Русский'
   );
 }, 10000);
+
+test('It should support skipEmailValidation for test providers with IDs', async () => {
+  const testProviderClient = new MikroMail({
+    config: {
+      ...MAILPIT_CONFIG,
+      skipEmailValidation: true,
+      skipMXRecordCheck: true
+    }
+  });
+
+  await testProviderClient.send({
+    from: 'sender@example.com',
+    to: 'a1b2c3d4e5f6g7', // Simulating a test provider ID
+    subject: 'Integration Test - Skip Validation',
+    text: 'This email was sent with skipEmailValidation enabled.'
+  });
+
+  await new Promise((resolve) => setTimeout(resolve, 500));
+
+  const messages = await getMailpitMessages();
+  const testEmail = messages.find(
+    (msg: any) => msg.Subject === 'Integration Test - Skip Validation'
+  );
+
+  expect(testEmail).toBeDefined();
+  expect(testEmail.From.Address).toBe('sender@example.com');
+}, 10000);
+
+test('It should allow non-standard recipient formats when validation is skipped', async () => {
+  const testProviderClient = new MikroMail({
+    config: {
+      ...MAILPIT_CONFIG,
+      skipEmailValidation: true,
+      skipMXRecordCheck: true
+    }
+  });
+
+  await testProviderClient.send({
+    from: 'sender@example.com',
+    to: ['test-id-12345', 'another-test-id-67890'],
+    subject: 'Integration Test - Multiple Test IDs',
+    text: 'This email was sent to multiple test provider IDs.'
+  });
+
+  await new Promise((resolve) => setTimeout(resolve, 500));
+
+  const messages = await getMailpitMessages();
+  const testEmail = messages.find(
+    (msg: any) => msg.Subject === 'Integration Test - Multiple Test IDs'
+  );
+
+  expect(testEmail).toBeDefined();
+}, 10000);

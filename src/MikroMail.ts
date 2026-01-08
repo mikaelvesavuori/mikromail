@@ -24,6 +24,7 @@ import { verifyEmailDomain } from './utils/index.js';
  */
 export class MikroMail {
   private readonly smtpClient: SMTPClient;
+  private readonly config: any;
 
   constructor(options?: ConfigurationOptions) {
     const config = new Configuration(options).get();
@@ -31,6 +32,7 @@ export class MikroMail {
     const smtpClient = new SMTPClient(config);
 
     this.smtpClient = smtpClient;
+    this.config = config;
   }
 
   /**
@@ -42,12 +44,15 @@ export class MikroMail {
         ? emailOptions.to
         : [emailOptions.to];
 
-      for (const recipient of recipients) {
-        const hasMXRecords = await verifyEmailDomain(recipient);
-        if (!hasMXRecords)
-          console.error(
-            `Warning: No MX records found for recipient domain: ${recipient}`
-          );
+      // Only check MX records if not explicitly skipped (for test providers)
+      if (!this.config.skipMXRecordCheck) {
+        for (const recipient of recipients) {
+          const hasMXRecords = await verifyEmailDomain(recipient);
+          if (!hasMXRecords)
+            console.error(
+              `Warning: No MX records found for recipient domain: ${recipient}`
+            );
+        }
       }
 
       const result = await this.smtpClient.sendEmail(emailOptions);

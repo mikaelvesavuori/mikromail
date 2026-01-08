@@ -49,7 +49,9 @@ export class Configuration {
       port: 465,
       secure: true,
       debug: false,
-      maxRetries: 2
+      maxRetries: 2,
+      skipEmailValidation: false,
+      skipMXRecordCheck: false
     };
 
     let fileConfig: Partial<SMTPConfiguration> = {};
